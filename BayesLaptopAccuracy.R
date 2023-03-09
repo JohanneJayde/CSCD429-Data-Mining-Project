@@ -1,5 +1,3 @@
-#install package
-install.packages(c("naivebayes", "dplyr", "ggplot2", "psych", "e1071"))
 
 # Loading package
 library(naivebayes)
@@ -10,40 +8,78 @@ library(e1071)
 
 #set test and training sets
 laptopTest <- read.csv("C:/Users/12086/Documents/RStudio/laptopSets/laptop_data_test_set.csv", header =T)
-laptopTraining <- read.csv("C:/Users/12086/Documents/RStudio/laptopSets/laptop_data_0s_replaced_by_avg_of_nonzeros.csv", header =T)
+laptopTraining <- read.csv("C:/Users/12086/Documents/RStudio/laptopSets/laptop_data_training_set.csv", header =T)
 
-#convert all types into factor variables or something
+#convert all attributes into factor variables or something
+laptopTraining$brand <- as.factor(laptopTraining$brand)
+laptopTraining$model <- as.factor(laptopTraining$model)
+laptopTraining$processor_brand <- as.factor(laptopTraining$processor_brand)
+laptopTraining$processor_name <- as.factor(laptopTraining$processor_name)
+laptopTraining$processor_gnrtn <- as.factor(laptopTraining$processor_gnrtn)
 laptopTraining$ram_gb <- as.factor(laptopTraining$ram_gb)
+laptopTraining$ram_type <- as.factor(laptopTraining$ram_type)
 laptopTraining$ssd <- as.factor(laptopTraining$ssd)
 laptopTraining$hdd <- as.factor(laptopTraining$hdd)
+laptopTraining$os <- as.factor(laptopTraining$os)
+laptopTraining$os_bit <- as.factor(laptopTraining$os_bit)
 laptopTraining$graphic_card_gb <- as.factor(laptopTraining$graphic_card_gb)
+laptopTraining$weight <- as.factor(laptopTraining$weight)
 laptopTraining$display_size <- as.factor(laptopTraining$display_size)
 laptopTraining$warranty <- as.factor(laptopTraining$warranty)
+laptopTraining$Touchscreen <- as.factor(laptopTraining$Touchscreen)
+laptopTraining$msoffice <- as.factor(laptopTraining$msoffice)
 laptopTraining$latest_price <- as.factor(laptopTraining$latest_price)
+laptopTraining$latest_price_range <- as.factor(laptopTraining$latest_price_range)
 laptopTraining$old_price <- as.factor(laptopTraining$old_price)
 laptopTraining$discount <- as.factor(laptopTraining$discount)
 laptopTraining$star_rating <- as.factor(laptopTraining$star_rating)
 laptopTraining$ratings <- as.factor(laptopTraining$ratings)
 laptopTraining$reviews <- as.factor(laptopTraining$reviews)
+laptopTest$brand <- as.factor(laptopTest$brand)
+laptopTest$model <- as.factor(laptopTest$model)
+laptopTest$processor_brand <- as.factor(laptopTest$processor_brand)
+laptopTest$processor_name <- as.factor(laptopTest$processor_name)
+laptopTest$processor_gnrtn <- as.factor(laptopTest$processor_gnrtn)
 laptopTest$ram_gb <- as.factor(laptopTest$ram_gb)
+laptopTest$ram_type <- as.factor(laptopTest$ram_type)
 laptopTest$ssd <- as.factor(laptopTest$ssd)
 laptopTest$hdd <- as.factor(laptopTest$hdd)
+laptopTest$os <- as.factor(laptopTest$os)
+laptopTest$os_bit <- as.factor(laptopTest$os_bit)
 laptopTest$graphic_card_gb <- as.factor(laptopTest$graphic_card_gb)
+laptopTest$weight <- as.factor(laptopTest$weight)
 laptopTest$display_size <- as.factor(laptopTest$display_size)
 laptopTest$warranty <- as.factor(laptopTest$warranty)
+laptopTest$Touchscreen <- as.factor(laptopTest$Touchscreen)
+laptopTest$msoffice <- as.factor(laptopTest$msoffice)
 laptopTest$latest_price <- as.factor(laptopTest$latest_price)
+laptopTest$latest_price_range <- as.factor(laptopTest$latest_price_range)
 laptopTest$old_price <- as.factor(laptopTest$old_price)
 laptopTest$discount <- as.factor(laptopTest$discount)
 laptopTest$star_rating <- as.factor(laptopTest$star_rating)
 laptopTest$ratings <- as.factor(laptopTest$ratings)
 laptopTest$reviews <- as.factor(laptopTest$reviews)
+
+#set the levels of every factor variable in test to be the same as the levels of the training set
+laptopTest$brand <- factor(laptopTest$brand, levels = levels(laptopTraining$brand))
+laptopTest$model <- factor(laptopTest$model, levels = levels(laptopTraining$model))
+laptopTest$processor_brand <- factor(laptopTest$processor_brand, levels = levels(laptopTraining$processor_brand))
+laptopTest$processor_name <- factor(laptopTest$processor_name, levels = levels(laptopTraining$processor_name))
+laptopTest$processor_gnrtn <- factor(laptopTest$processor_gnrtn, levels = levels(laptopTraining$processor_gnrtn))
 laptopTest$ram_gb <- factor(laptopTest$ram_gb, levels = levels(laptopTraining$ram_gb))
+laptopTest$ram_type <- factor(laptopTest$ram_type, levels = levels(laptopTraining$ram_type))
 laptopTest$ssd <- factor(laptopTest$ssd, levels = levels(laptopTraining$ssd))
 laptopTest$hdd <- factor(laptopTest$hdd, levels = levels(laptopTraining$hdd))
+laptopTest$os <- factor(laptopTest$os, levels = levels(laptopTraining$os))
+laptopTest$os_bit <- factor(laptopTest$os_bit, levels = levels(laptopTraining$os_bit))
 laptopTest$graphic_card_gb <- factor(laptopTest$graphic_card_gb, levels = levels(laptopTraining$graphic_card_gb))
+laptopTest$weight <- factor(laptopTest$weight, levels = levels(laptopTraining$weight))
 laptopTest$display_size <- factor(laptopTest$display_size, levels = levels(laptopTraining$display_size))
 laptopTest$warranty <- factor(laptopTest$warranty, levels = levels(laptopTraining$warranty))
+laptopTest$Touchscreen <- factor(laptopTest$Touchscreen, levels = levels(laptopTraining$Touchscreen))
+laptopTest$msoffice <- factor(laptopTest$msoffice, levels = levels(laptopTraining$msoffice))
 laptopTest$latest_price <- factor(laptopTest$latest_price, levels = levels(laptopTraining$latest_price))
+laptopTest$latest_price_range <- factor(laptopTest$latest_price_range, levels = levels(laptopTraining$latest_price_range))
 laptopTest$old_price <- factor(laptopTest$old_price, levels = levels(laptopTraining$old_price))
 laptopTest$discount <- factor(laptopTest$discount, levels = levels(laptopTraining$discount))
 laptopTest$star_rating <- factor(laptopTest$star_rating, levels = levels(laptopTraining$star_rating))
@@ -59,9 +95,6 @@ p <- predict(model, laptopTest)
 #getting the confusion matrix for latest_price_range from the prediction
 tab <- table(p, laptopTest$latest_price_range)
 
-#finding the MISCLASSIFICATION percent
-misclass <- 1-sum(diag(tab))/sum(tab)
-
-#finding the correct classification percent
-class <- 1-misclass
+#finding the classification percent
+class <- sum(diag(tab))/sum(tab)
 class
