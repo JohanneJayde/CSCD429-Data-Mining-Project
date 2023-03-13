@@ -16,13 +16,22 @@ training_set$model[training_set$model == "Ideapad"] <- "IdeaPad"
 training_set <- subset(training_set, select = -latest_price_range)
 training_set <- training_set[training_set$old_price > 0,]
 
+#remove these two lines if you want test the regressions with "outliers"
+test_set <- test_set[test_set$latest_price < 1515.55,]
+training_set <- training_set[training_set$latest_price < 1619.53,]
+
+
 #fix issue with Inspiron and Insprion and IdeaPad and Ideapad
 test_set$model[test_set$model == "Insprion"] <- "Inspiron"
 test_set$model[test_set$model == "Ideapad"] <- "IdeaPad"
+test_set$model[test_set$model == "OMEN"] <- "Omen"
 test_set$processor_name[test_set$processor_name == "GEFORCE RTX"] <- "GeForce RTX"
 #removing latest_price_range to stop it from influencing regression model
 test_set <- subset(test_set, select = -latest_price_range)
 test_set <- test_set[test_set$old_price > 0,]
+
+test_set <- test_set[test_set$latest_price < 3000,]
+training_set <- training_set[training_set$latest_price < 4000,]
 
 test_set_remove_model_prc_brand <- subset(test_set, select= -c(model, processor_brand))
 training_set_remove_model_prc_brand <- subset(training_set, select= -c(model, processor_brand))
@@ -36,6 +45,9 @@ processor_name_vec <- c("Snapdragon 7c", "GeForce RTX")
 #remove rows with nomial values but in feature set without model or processor_name
 test_set_remove_model_prc_brand <- test_set_remove_model_prc_brand[!(test_set_remove_model_prc_brand$brand %in% brand_vec),]
 test_set_remove_model_prc_brand <- test_set_remove_model_prc_brand[!(test_set_remove_model_prc_brand$processor_name %in% processor_name_vec),]
+
+test_set_remove_colinearity <-subset(test_set_remove_model_prc_brand, select= -c(graphic_card_gb))
+training_set_remove_colinearity <-subset(training_set_remove_model_prc_brand, select= -c(graphic_card_gb))
 
 #remove rows with nominal values not pressent in the training set, this is done to make the model working and may be changed
 #swapping to target encoding may help but that led to NaN issues
@@ -113,6 +125,7 @@ predict_linear_regression <- function(test_set, training_set, num){
 }
 
 #testing with all variables
+predict_linear_regression(test_set_new[test_set_new$brand != "alienware",], training_set, 22)
 predict_linear_regression(test_set_new[test_set_new$brand != "alienware",], training_set, 10)
 
 #testing with two variables, this removes issues with independent variables that correlate to each other
@@ -126,5 +139,8 @@ chisq.test(training_set$model, training_set$processor_brand)
 
 #testing without model or processor_brand with 4 features
 #four features result in the highest values
-predict_linear_regression(test_set_remove_model_prc_brand, test_set_remove_model_prc_brand, 4)
+predict_linear_regression(test_set_remove_model_prc_brand, training_set_remove_model_prc_brand, 4)
+
+
+
 
